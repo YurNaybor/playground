@@ -1,0 +1,17 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+#serversTransport:
+#  insecureSkipVerify: true
+entryPoints:
+  web:
+    address: ":8081"
+  websecure:
+    address: ":8443"
+providers:
+  file:
+    directory: /etc/traefik/dynamic.d
+    watch: true
+log:
+  level: info
+#accessLog: {
