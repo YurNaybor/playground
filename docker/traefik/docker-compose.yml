@@ -3,8 +3,9 @@ version: '2.4'
 services:
   traefik:
     image: traefik:v2.3
-    mem_limit: 256m
-    mem_reservation: 64m
+    # Limits are not usable on Hosteurope Virtual Server
+    #mem_limit: 256m
+    #mem_reservation: 64m
     user: nobody:nobody
     read_only: true
     volumes:

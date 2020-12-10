@@ -14,4 +14,4 @@ providers:
     watch: true
 log:
   level: info
-#accessLog: {
+accessLog: {}
