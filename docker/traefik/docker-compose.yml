@@ -40,6 +40,8 @@ services:
     networks:
       - docker-socket-proxy
       - traefik
+    tmpfs:
+      - /etc/traefik/acme
   whoami:
     image: containous/whoami:latest
     networks:
