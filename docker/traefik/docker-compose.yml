@@ -52,6 +52,7 @@ services:
       - traefik.http.routers.whoami.rule=Host(`benvo.net`, `www.benvo.net`)
       - traefik.http.services.whoami.loadbalancer.server.port=80
 networks:
+  docker-socket-proxy:
   traefik:
     name: traefik
 ...
