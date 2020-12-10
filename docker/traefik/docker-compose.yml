@@ -1,6 +1,21 @@
 ---
 version: '2.4'
 services:
+  docker-socket-proxy:
+    image: tecnativa/docker-socket-proxy:latest
+    restart: unless-stopped
+    user: nobody:999
+    command: ["haproxy", "-f", "/usr/local/etc/haproxy/haproxy.cfg", "-p", "/tmp/haproxy.pid"]
+    environment:
+      CONTAINERS: 1
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    networks:
+      - docker-socket-proxy
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
   traefik:
     image: traefik:v2.3
     # Limits are not usable on Hosteurope Virtual Server
@@ -8,6 +23,8 @@ services:
     #mem_reservation: 64m
     user: nobody:nobody
     read_only: true
+    depends_on:
+      - docker-socket-proxy
     volumes:
       - ./configs/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./configs/dynamic.d:/etc/traefik/dynamic.d:ro
@@ -19,4 +36,20 @@ services:
       - no-new-privileges:true
     cap_drop:
       - ALL
+    networks:
+      - docker-socket-proxy
+      - traefik
+  whoami:
+    image: containous/whoami:latest
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.whoami.entrypoints=web,websecure
+      - traefik.http.routers.whoami.tls=true
+      - traefik.http.routers.whoami.rule=Host(`benvo.net`, `www.benvo.net`)
+      - traefik.http.services.whoami.loadbalancer.server.port=80
+networks:
+  docker-socket-proxy:
+  traefik:
 ...

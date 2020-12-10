@@ -12,6 +12,10 @@ providers:
   file:
     directory: /etc/traefik/dynamic.d
     watch: true
+  docker:
+    exposedByDefault: false
+    endpoint: "tcp://docker-socket-proxy:2375"
+    network: "traefik"
 log:
   level: info
 accessLog: {}
