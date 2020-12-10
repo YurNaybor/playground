@@ -4,8 +4,9 @@ services:
   docker-socket-proxy:
     image: tecnativa/docker-socket-proxy:latest
     restart: unless-stopped
-    user: nobody:999
-    command: ["haproxy", "-f", "/usr/local/etc/haproxy/haproxy.cfg", "-p", "/tmp/haproxy.pid"]
+    # The gid is not deterministic..
+    #user: nobody:999
+    #command: ["haproxy", "-f", "/usr/local/etc/haproxy/haproxy.cfg", "-p", "/tmp/haproxy.pid"]
     environment:
       CONTAINERS: 1
     security_opt:
